@@ -9,12 +9,14 @@ const isDev = !isProd
 
 const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`
 
-function jsLoaders() {
+const jsLoaders = () => {
   const loaders = [
     {
       loader: 'babel-loader',
-      options: {presets: ['@babel/preset-env']}
-    },
+      options: {
+        presets: ['@babel/preset-env']
+      }
+    }
   ]
 
   if (isDev) {
@@ -37,11 +39,11 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
       '@core': path.resolve(__dirname, 'src/core')
-    },
+    }
   },
   devtool: isDev ? 'source-map' : false,
   devServer: {
-    port: 4200,
+    port: 3000,
     hot: isDev
   },
   plugins: [
@@ -51,17 +53,17 @@ module.exports = {
       minify: {
         removeComments: isProd,
         collapseWhitespace: isProd
-      },
+      }
     }),
-    new CopyPlugin({
-      patterns: [{
+    new CopyPlugin([
+      {
         from: path.resolve(__dirname, 'src/favicon.ico'),
         to: path.resolve(__dirname, 'dist')
-      }],
-    }),
+      }
+    ]),
     new MiniCssExtractPlugin({
       filename: filename('css')
-    }),
+    })
   ],
   module: {
     rules: [
@@ -73,26 +75,16 @@ module.exports = {
             options: {
               hmr: isDev,
               reloadAll: true
-            },
+            }
           },
           'css-loader',
           'sass-loader'
         ],
       },
       {
-        rules: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: jsLoaders(),
-            loader: {
-              loader: 'babel-loader',
-              options: {
-                presets: ['@babel/preset-env']
-              }
-            }
-          }
-        ]
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: jsLoaders()
       }
     ]
   }
