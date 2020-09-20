@@ -11,9 +11,10 @@
   display: flex;
   justify-content: space-between;
 
-  &-input {
+  & .input {
     margin: 0;
     padding: 2px 7px;
+    min-width: 1px;
     color: #000;
     border: 1px solid transparent;
     border-radius: 2px;
@@ -31,10 +32,8 @@
     }
   }
 
-  &-buttons {
-    &-item {
-      @include button();
-    }
+  .button {
+    @include button(red);
   }
 
 }
