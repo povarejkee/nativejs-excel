@@ -2,26 +2,29 @@ import { $ } from '@core/DOMHelper'
 
 export class Excel {
   constructor(selector, options) {
-    this.$element = document.querySelector(selector)
+    this.$app = $(selector)
     this.components = options.components || []
   }
 
-  getRoot() {
-    const $root = $().create('div', 'excel')
+  getExcel() {
+    const $excel = $().create('div', 'excel')
 
-    this.components.forEach(Component => {
-      const $wrapper = $().create('div', Component.className)
-      const instance = new Component()
+    this. components = this.components.map(Component => {
+      const $root = $().create('div', Component.className)
+      const component = new Component($root)
 
-      $wrapper.innerHTML = instance.toHTML()
+      $root.html(component.toHTML())
 
-      $root.append($wrapper)
+      $excel.appendNode($root)
+
+      return component
     })
 
-    return $root
+    return $excel
   }
 
   render() {
-    this.$element.append(this.getRoot())
+    this.$app.appendNode(this.getExcel())
+    this.components.forEach(component => component.init())
   }
 }

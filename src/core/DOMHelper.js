@@ -1,21 +1,49 @@
 class DOMHelper {
   constructor(selector) {
-    this.$element = typeof selector === 'string'
+    this.$nativeElement = typeof selector === 'string'
       ? document.querySelector(selector)
       : selector
   }
 
-  create(tagName, classes = '') {
-    const $element = document.createElement(tagName)
+  create(tagName, classes) {
+    const $newElement = document.createElement(tagName)
 
     if (classes) {
-      $element.classList.add(classes)
+      $newElement.classList.add(classes)
     }
 
-    return $element
+    return $($newElement)
   }
 
-  // todo lesson 33
+  /*  get html() {
+    return this.$nativeElement.outerHTML.trim()
+  }
+
+  set html(html) {
+    if (typeof html === 'string') {
+      this.$nativeElement.innerHTML = html
+      return this
+    }
+  }*/
+
+  html(html) {
+    if (typeof html === 'string') {
+      this.$nativeElement.innerHTML = html
+      return this
+    }
+
+    return this.$nativeElement.outerHTML.trim()
+  }
+
+  appendNode(node) {
+    if (node instanceof DOMHelper) {
+      node = node.$nativeElement
+    }
+
+    this.$nativeElement.append(node)
+  }
 }
 
-export const $ = selector => new DOMHelper(selector)
+export function $(selector) {
+  return new DOMHelper(selector)
+}
