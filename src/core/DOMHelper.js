@@ -42,6 +42,10 @@ class DOMHelper {
 
     this.$nativeElement.append(node)
   }
+
+  on(eventType, callback) {
+    this.$nativeElement.addEventListener(eventType, callback)
+  }
 }
 
 export function $(selector) {
